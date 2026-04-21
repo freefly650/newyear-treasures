@@ -3,12 +3,14 @@ import { query, ensureSchema } from "@/lib/db";
 import type { DollRow } from "@/lib/db";
 import { ensureAdmin } from "@/lib/admin-auth";
 
-interface ExportDoll {
+interface ExportToy {
   id: string;
   name: string;
   line: string | null;
-  year: number | null;
-  condition: string | null;
+  factory: string | null;
+  year: string | null;
+  paint: string | null;
+  rarity: string | null;
   notes: string | null;
   imageUrl: string | null;
   createdAt: string;
@@ -19,7 +21,7 @@ interface BackupPayload {
   version: 3;
   exportedAt: string;
   userId: string;
-  toys: ExportDoll[];
+  toys: ExportToy[];
 }
 
 export async function GET(request: NextRequest) {
@@ -50,16 +52,18 @@ export async function GET(request: NextRequest) {
     }
 
     const rows = await query<DollRow>(
-      "SELECT id, user_id, name, line, year, condition, notes, image_url, created_at, updated_at FROM toys WHERE user_id = $1 ORDER BY created_at DESC",
+      "SELECT id, user_id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at FROM toys WHERE user_id = $1 ORDER BY created_at DESC",
       [userId]
     );
 
-    const toys: ExportDoll[] = rows.map((row) => ({
+    const toys: ExportToy[] = rows.map((row) => ({
       id: row.id,
       name: row.name,
       line: row.line,
+      factory: row.factory,
       year: row.year,
-      condition: row.condition,
+      paint: row.paint,
+      rarity: row.rarity,
       notes: row.notes,
       imageUrl: row.image_url,
       createdAt: row.created_at.toISOString(),

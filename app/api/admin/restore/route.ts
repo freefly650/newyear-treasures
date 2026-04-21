@@ -7,12 +7,14 @@ import {
   isCloudinaryConfigured,
 } from "@/lib/cloudinary";
 
-interface ImportDoll {
+interface ImportToy {
   id: string;
   name: string;
   line?: string | null;
-  year?: number | null;
-  condition?: string | null;
+  factory?: string | null;
+  year?: string | null;
+  paint?: string | null;
+  rarity?: string | null;
   notes?: string | null;
   imageUrl?: string | null;
   imageContentType?: string | null;
@@ -26,7 +28,7 @@ interface ImportPayload {
   userId: string;
   replaceAll?: boolean;
   copyImages?: boolean;
-  toys?: ImportDoll[];
+  toys?: ImportToy[];
 }
 
 export async function POST(request: NextRequest) {
@@ -106,18 +108,20 @@ export async function POST(request: NextRequest) {
         image_url = await uploadImage(buf, mime, userId);
       }
 
-      const dollId = crypto.randomUUID();
+      const toyId = crypto.randomUUID();
       await query(
         `INSERT INTO toys
-          (user_id, id, name, line, year, condition, notes, image_url, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+          (user_id, id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
         [
           userId,
-          dollId,
+          toyId,
           d.name,
           d.line ?? null,
+          d.factory ?? null,
           d.year ?? null,
-          d.condition ?? null,
+          d.paint ?? null,
+          d.rarity ?? null,
           d.notes ?? null,
           image_url,
           new Date(d.createdAt),

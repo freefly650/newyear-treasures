@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 
 interface ImageModalProps {
   imageUrl: string;
@@ -37,12 +38,19 @@ export function ImageModal({ imageUrl, alt, onClose }: ImageModalProps) {
       >
         <span className="text-xl leading-none">×</span>
       </button>
-      <img
-        src={imageUrl}
-        alt={alt}
-        className="max-h-full max-w-full object-contain"
+      <div
+        className="relative h-[85vh] w-[85vw]"
         onClick={(e) => e.stopPropagation()}
-      />
+      >
+        <Image
+          src={imageUrl}
+          alt={alt}
+          fill
+          sizes="85vw"
+          className="object-contain"
+          unoptimized
+        />
+      </div>
     </div>
   );
 }
