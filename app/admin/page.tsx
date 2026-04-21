@@ -203,7 +203,7 @@ export default function AdminPage() {
       const a = document.createElement("a");
       const stamp = new Date().toISOString().replace(/[:.]/g, "-");
       a.href = url;
-      a.download = `barbie-collection-backup-${stamp}.json`;
+      a.download = `newyear-treasures-backup-${stamp}.json`;
       document.body.appendChild(a);
       a.click();
       a.remove();

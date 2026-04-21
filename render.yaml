@@ -3,7 +3,7 @@
 
 services:
   - type: web
-    name: barbie-collection
+    name: newyear-treasures
     runtime: node
     plan: free
 
