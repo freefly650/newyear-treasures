@@ -20,11 +20,11 @@ export function isCloudinaryConfigured(): boolean {
   return !!(cloudName && apiKey && apiSecret);
 }
 
-const UPLOAD_FOLDER_BASE = "barbie-collection";
+const UPLOAD_FOLDER_BASE = "newyear-treasures";
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5MB
 
 /**
- * Upload image to Cloudinary. Uses per-user folder: barbie-collection/{userId}
+ * Upload image to Cloudinary. Uses per-user folder: newyear-treasures/{userId}
  */
 export async function uploadImage(
   buffer: Buffer,
@@ -113,7 +113,7 @@ export async function deleteImage(imageUrl: string | null): Promise<void> {
 }
 
 /**
- * Delete all assets in a user's folder (barbie-collection/{userId}/).
+ * Delete all assets in a user's folder (newyear-treasures/{userId}/).
  * Use when deleting a user to remove their folder and any orphaned assets.
  * No-op if Cloudinary is not configured. Logs and ignores errors.
  */
