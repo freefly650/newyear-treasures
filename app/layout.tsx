@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   description: "Каталог вашої колекції новорічних іграшок.",
   icons: {
     icon: "/tree-logo.svg",
-    apple: "/tree-logo.svg",
+    apple: "/apple-touch-icon.png",
   },
   appleWebApp: {
     capable: true,
