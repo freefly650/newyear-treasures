@@ -3,6 +3,28 @@ import bcrypt from "bcrypt";
 
 let pool: Pool | null = null;
 
+/**
+ * pg-connection-string v2 warns when sslmode is prefer/require/verify-ca without
+ * opting into libpq semantics. Neon/Render URLs often use sslmode=require; adding
+ * uselibpqcompat=true silences the warning and matches libpq require behavior.
+ */
+function normalizeDatabaseUrl(connectionString: string): string {
+  try {
+    const url = new URL(connectionString);
+    if (url.searchParams.get("uselibpqcompat") === "true") {
+      return connectionString;
+    }
+    const mode = url.searchParams.get("sslmode")?.toLowerCase();
+    if (mode === "prefer" || mode === "require" || mode === "verify-ca") {
+      url.searchParams.set("uselibpqcompat", "true");
+      return url.toString();
+    }
+  } catch {
+    // Invalid URL: pass through; pg will surface a clear error
+  }
+  return connectionString;
+}
+
 function getPool(): Pool {
   // Loaded from .env.local when running locally, or from Render Environment when deployed
   const connectionString = process.env.DATABASE_URL;
@@ -19,7 +41,7 @@ function getPool(): Pool {
       !connectionString.includes("localhost") &&
       !connectionString.includes("127.0.0.1");
     pool = new Pool({
-      connectionString,
+      connectionString: normalizeDatabaseUrl(connectionString),
       ssl: useSsl ? { rejectUnauthorized: false } : false,
     });
   }

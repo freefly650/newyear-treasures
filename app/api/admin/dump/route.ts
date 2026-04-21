@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { query, ensureSchema } from "@/lib/db";
 import type { ToyRow } from "@/lib/db";
 import { ensureAdmin } from "@/lib/admin-auth";
+import { getClientErrorMessage } from "@/lib/client-error-message";
 
 interface ExportToy {
   id: string;
@@ -81,7 +82,7 @@ export async function GET(request: NextRequest) {
   } catch (err) {
     console.error("GET /api/admin/dump", err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Database error" },
+      { error: getClientErrorMessage(err, "Database error") },
       { status: 500 }
     );
   }

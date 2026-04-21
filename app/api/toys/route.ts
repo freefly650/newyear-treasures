@@ -3,6 +3,7 @@ import { query, ensureSchema } from "@/lib/db";
 import { rowToToy } from "@/lib/db-mappers";
 import { uploadImage, isCloudinaryConfigured } from "@/lib/cloudinary";
 import { getCurrentUserId } from "@/lib/session";
+import { getClientErrorMessage } from "@/lib/client-error-message";
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5MB
 
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest) {
   } catch (err) {
     console.error("GET /api/toys", err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Database error" },
+      { error: getClientErrorMessage(err, "Database error") },
       { status: 500 }
     );
   }
@@ -105,7 +106,7 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     console.error("POST /api/toys", err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Database error" },
+      { error: getClientErrorMessage(err, "Database error") },
       { status: 500 }
     );
   }

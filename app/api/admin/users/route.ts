@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ensureAdmin } from "@/lib/admin-auth";
 import { query, ensureSchema } from "@/lib/db";
+import { getClientErrorMessage } from "@/lib/client-error-message";
 import bcrypt from "bcrypt";
 
 const SALT_ROUNDS = 10;
@@ -35,7 +36,7 @@ export async function GET(request: NextRequest) {
   } catch (err) {
     console.error("GET /api/admin/users", err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Database error" },
+      { error: getClientErrorMessage(err, "Database error") },
       { status: 500 }
     );
   }
