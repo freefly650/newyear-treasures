@@ -1,0 +1,11 @@
+# Exclude from Vercel upload (faster deploys)
+coverage
+e2e
+__tests__
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+playwright.config.ts
+vitest.config.ts
+setupTests.ts

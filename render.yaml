@@ -1,0 +1,12 @@
+# Render Blueprint – deploy as Web Service
+# https://docs.render.com/blueprint-spec
+
+services:
+  - type: web
+    name: barbie-collection
+    runtime: node
+    plan: free
+
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/auth/config
