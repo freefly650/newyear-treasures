@@ -1,6 +1,6 @@
-import type { Doll } from "./types";
+import type { Toy } from "./types";
 
-export type DollSortKey =
+export type ToySortKey =
   | "time_desc"
   | "time_asc"
   | "year_asc"
@@ -8,7 +8,7 @@ export type DollSortKey =
   | "line_asc"
   | "title_asc";
 
-function parseTime(d: Doll): number {
+function parseTime(d: Toy): number {
   // createdAt should always be present, but keep this robust for tests/edge-cases.
   return Number.isFinite(Date.parse(d.createdAt)) ? Date.parse(d.createdAt) : 0;
 }
@@ -17,11 +17,11 @@ function compareStringsAsc(a: string, b: string) {
   return a.localeCompare(b, "uk", { sensitivity: "base" });
 }
 
-export function sortToys(toys: Doll[], sortKey: DollSortKey): Doll[] {
+export function sortToys(toys: Toy[], sortKey: ToySortKey): Toy[] {
   return [...toys].sort((a, b) => compareToys(a, b, sortKey));
 }
 
-export function compareToys(a: Doll, b: Doll, sortKey: DollSortKey): number {
+export function compareToys(a: Toy, b: Toy, sortKey: ToySortKey): number {
   const createdAtCmpDesc = () => {
     const ta = parseTime(a);
     const tb = parseTime(b);

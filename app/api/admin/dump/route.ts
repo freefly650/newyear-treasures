@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { query, ensureSchema } from "@/lib/db";
-import type { DollRow } from "@/lib/db";
+import type { ToyRow } from "@/lib/db";
 import { ensureAdmin } from "@/lib/admin-auth";
 
 interface ExportToy {
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const rows = await query<DollRow>(
+    const rows = await query<ToyRow>(
       "SELECT id, user_id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at FROM toys WHERE user_id = $1 ORDER BY created_at DESC",
       [userId]
     );

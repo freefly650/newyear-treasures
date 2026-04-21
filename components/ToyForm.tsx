@@ -1,27 +1,27 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import type { Doll, DollFormData, Paint, Rarity } from "@/lib/types";
+import type { Toy, ToyFormData, Paint, Rarity } from "@/lib/types";
 
 const PAINTS: Paint[] = ["amalhama", "farba"];
 const RARITIES: Rarity[] = ["R", "RR", "RRR"];
 
-export interface DollFormSavePayload {
-  data: DollFormData;
+export interface ToyFormSavePayload {
+  data: ToyFormData;
   imageFile?: File | null;
   removeImage?: boolean;
 }
 
-interface DollFormProps {
-  initial?: Doll | null;
-  onSave: (payload: DollFormSavePayload) => void;
+interface ToyFormProps {
+  initial?: Toy | null;
+  onSave: (payload: ToyFormSavePayload) => void;
   onCancel: () => void;
   onDelete?: (id: string) => void;
   saving?: boolean;
   saveError?: string | null;
 }
 
-const emptyForm: DollFormData = {
+const emptyForm: ToyFormData = {
   name: "",
   line: "",
   factory: "",
@@ -32,15 +32,15 @@ const emptyForm: DollFormData = {
   imageUrl: "",
 };
 
-export function DollForm({
+export function ToyForm({
   initial,
   onSave,
   onCancel,
   onDelete,
   saving = false,
   saveError = null,
-}: DollFormProps) {
-  const [form, setForm] = useState<DollFormData>(emptyForm);
+}: ToyFormProps) {
+  const [form, setForm] = useState<ToyFormData>(emptyForm);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [removeImage, setRemoveImage] = useState(false);
@@ -95,7 +95,7 @@ export function DollForm({
     e.preventDefault();
     const name = form.name.trim();
     if (!name) return;
-    const data: DollFormData = {
+    const data: ToyFormData = {
       ...form,
       name,
       line: form.line?.trim() || undefined,

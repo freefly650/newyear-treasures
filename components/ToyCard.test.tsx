@@ -1,21 +1,21 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { DollCard } from "./DollCard";
+import { ToyCard } from "./ToyCard";
 
-const baseDoll = {
-  id: "doll-1",
+const baseToy = {
+  id: "toy-1",
   name: "Barbie Fashionistas",
   createdAt: "2024-01-01T00:00:00.000Z",
   updatedAt: "2024-01-01T00:00:00.000Z",
 };
 
-describe("DollCard", () => {
-  it("renders doll name", () => {
+describe("ToyCard", () => {
+  it("renders toy name", () => {
     const onEdit = vi.fn();
     render(
-      <DollCard
-        doll={{ ...baseDoll }}
+      <ToyCard
+        toy={{ ...baseToy }}
         onEdit={onEdit}
       />
     );
@@ -25,8 +25,8 @@ describe("DollCard", () => {
   it("renders line and year when present", () => {
     const onEdit = vi.fn();
     render(
-      <DollCard
-        doll={{ ...baseDoll, line: "Collector", year: "2020" }}
+      <ToyCard
+        toy={{ ...baseToy, line: "Collector", year: "2020" }}
         onEdit={onEdit}
       />
     );
@@ -36,8 +36,8 @@ describe("DollCard", () => {
   it("renders paint and rarity label", () => {
     const onEdit = vi.fn();
     render(
-      <DollCard
-        doll={{ ...baseDoll, paint: "amalhama", rarity: "RR" }}
+      <ToyCard
+        toy={{ ...baseToy, paint: "amalhama", rarity: "RR" }}
         onEdit={onEdit}
       />
     );
@@ -47,8 +47,8 @@ describe("DollCard", () => {
   it("renders notes when present", () => {
     const onEdit = vi.fn();
     render(
-      <DollCard
-        doll={{ ...baseDoll, notes: "Never removed from box" }}
+      <ToyCard
+        toy={{ ...baseToy, notes: "Never removed from box" }}
         onEdit={onEdit}
       />
     );
@@ -59,18 +59,18 @@ describe("DollCard", () => {
     const user = userEvent.setup();
     const onEdit = vi.fn();
     render(
-      <DollCard
-        doll={{ ...baseDoll }}
+      <ToyCard
+        toy={{ ...baseToy }}
         onEdit={onEdit}
       />
     );
     await user.click(screen.getByRole("button", { name: /редагувати/i }));
-    expect(onEdit).toHaveBeenCalledWith("doll-1");
+    expect(onEdit).toHaveBeenCalledWith("toy-1");
   });
 
   it("does not render removed eBay price button", () => {
     const onEdit = vi.fn();
-    render(<DollCard doll={{ ...baseDoll }} onEdit={onEdit} />);
+    render(<ToyCard toy={{ ...baseToy }} onEdit={onEdit} />);
     expect(screen.queryByRole("button", { name: /price/i })).not.toBeInTheDocument();
   });
 });

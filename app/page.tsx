@@ -3,9 +3,9 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCollection } from "@/lib/collection-store";
-import { sortToys, type DollSortKey } from "@/lib/doll-sorting";
-import { DollCard } from "@/components/DollCard";
-import { DollForm, type DollFormSavePayload } from "@/components/DollForm";
+import { sortToys, type ToySortKey } from "@/lib/toy-sorting";
+import { ToyCard } from "@/components/ToyCard";
+import { ToyForm, type ToyFormSavePayload } from "@/components/ToyForm";
 import { ImageModal } from "@/components/ImageModal";
 
 export default function Home() {
@@ -14,14 +14,14 @@ export default function Home() {
     loading,
     error,
     reload,
-    addDoll,
-    updateDoll,
-    deleteDoll,
-    getDoll,
+    addToy,
+    updateToy,
+    deleteToy,
+    getToy,
   } = useCollection();
   const [search, setSearch] = useState("");
   const [filterLine, setFilterLine] = useState("");
-  const [sortKey, setSortKey] = useState<DollSortKey>("time_desc");
+  const [sortKey, setSortKey] = useState<ToySortKey>("time_desc");
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -75,14 +75,14 @@ export default function Home() {
 
   const sorted = useMemo(() => sortToys(filtered, sortKey), [filtered, sortKey]);
 
-  const editingDoll = editingId ? getDoll(editingId) : null;
+  const editingToy = editingId ? getToy(editingId) : null;
 
-  const handleSave = async (payload: DollFormSavePayload) => {
+  const handleSave = async (payload: ToyFormSavePayload) => {
     setSaveError(null);
     setSaving(true);
     try {
       if (editingId) {
-        await updateDoll(
+        await updateToy(
           editingId,
           payload.data,
           payload.imageFile,
@@ -90,7 +90,7 @@ export default function Home() {
         );
         setEditingId(null);
       } else {
-        await addDoll(payload.data, payload.imageFile);
+        await addToy(payload.data, payload.imageFile);
         setShowForm(false);
       }
     } catch (e) {
@@ -102,7 +102,7 @@ export default function Home() {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteDoll(id);
+      await deleteToy(id);
       if (editingId === id) setEditingId(null);
     } catch {
       // could set error state
@@ -175,7 +175,7 @@ export default function Home() {
           />
           <select
             value={sortKey}
-            onChange={(e) => setSortKey(e.target.value as DollSortKey)}
+            onChange={(e) => setSortKey(e.target.value as ToySortKey)}
             className="min-h-[48px] w-full rounded-xl border border-blush/50 bg-white/80 px-4 py-3 text-ink focus:border-rose focus:outline-none focus:ring-2 focus:ring-rose/20 touch-manipulation sm:w-auto"
             aria-label="Сортування"
           >
@@ -213,17 +213,17 @@ export default function Home() {
         </button>
       </div>
 
-      {(showForm || editingDoll) && (
+      {(showForm || editingToy) && (
         <div ref={formSectionRef} className="mb-8">
-          <DollForm
-            initial={editingDoll ?? undefined}
+          <ToyForm
+            initial={editingToy ?? undefined}
             onSave={handleSave}
             onCancel={() => {
               setShowForm(false);
               setEditingId(null);
               setSaveError(null);
             }}
-            onDelete={editingDoll ? handleDelete : undefined}
+            onDelete={editingToy ? handleDelete : undefined}
             saving={saving}
             saveError={saveError}
           />
@@ -252,16 +252,16 @@ export default function Home() {
         </div>
       ) : (
         <ul className="space-y-4">
-          {sorted.map((doll) => (
-            <li key={doll.id}>
-              <DollCard
-                doll={doll}
+          {sorted.map((toy) => (
+            <li key={toy.id}>
+              <ToyCard
+                toy={toy}
                 onEdit={(id) => {
                   setShowForm(false);
                   setEditingId(id);
                   setSaveError(null);
                 }}
-                onImageClick={(url) => setFullImage({ url, alt: doll.name })}
+                onImageClick={(url) => setFullImage({ url, alt: toy.name })}
               />
             </li>
           ))}

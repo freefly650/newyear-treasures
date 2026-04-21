@@ -1,4 +1,4 @@
-export interface DollRow {
+export interface ToyRow {
   id: string;
   name: string;
   line: string | null;
@@ -12,7 +12,7 @@ export interface DollRow {
   updated_at: Date;
 }
 
-export interface DollApi {
+export interface ToyApi {
   id: string;
   name: string;
   line?: string;
@@ -27,9 +27,9 @@ export interface DollApi {
 }
 
 /**
- * Map a DB doll row to the API doll shape (nulls → undefined, dates → ISO strings).
+ * Map a DB toy row to the API toy shape (nulls → undefined, dates → ISO strings).
  */
-export function rowToDoll(row: DollRow): DollApi {
+export function rowToToy(row: ToyRow): ToyApi {
   return {
     id: row.id,
     name: row.name,

@@ -35,7 +35,7 @@ export interface UserRow {
   updated_at: Date;
 }
 
-export interface DollRow {
+export interface ToyRow {
   id: string;
   user_id: string;
   name: string;

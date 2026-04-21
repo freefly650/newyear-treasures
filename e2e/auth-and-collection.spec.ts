@@ -30,9 +30,9 @@ test.describe("Auth and collection", () => {
     // After login, should land on home (collection)
     await expect(page).toHaveURL(/\/(\?.*)?$/);
 
-    // Page shows collection: empty state text or doll count or add button
+    // Page shows collection: empty state text or toy count or add button
     await expect(
-      page.getByText(/your collection|toys in your collection|add a doll/i).first()
+      page.getByText(/your collection|toys in your collection|add a toy/i).first()
     ).toBeVisible({ timeout: 10000 });
   });
 });

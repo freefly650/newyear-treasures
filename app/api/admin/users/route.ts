@@ -16,10 +16,10 @@ export async function GET(request: NextRequest) {
       email: string;
       name: string | null;
       created_at: Date;
-      doll_count: string | number;
+      toy_count: string | number;
     }>(
       `SELECT u.id, u.email, u.name, u.created_at,
-        (SELECT COUNT(*)::int FROM toys d WHERE d.user_id = u.id) AS doll_count
+        (SELECT COUNT(*)::int FROM toys d WHERE d.user_id = u.id) AS toy_count
        FROM users u
        ORDER BY u.created_at ASC`
     );
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
         email: r.email,
         name: r.name,
         createdAt: r.created_at.toISOString(),
-        dollCount: Number(r.doll_count) || 0,
+        toyCount: Number(r.toy_count) || 0,
       }))
     );
   } catch (err) {

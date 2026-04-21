@@ -1,7 +1,7 @@
 export type Paint = "amalhama" | "farba";
 export type Rarity = "R" | "RR" | "RRR";
 
-export interface Doll {
+export interface Toy {
   id: string;
   name: string;
   line?: string;
@@ -15,4 +15,4 @@ export interface Doll {
   updatedAt: string;
 }
 
-export type DollFormData = Omit<Doll, "id" | "createdAt" | "updatedAt">;
+export type ToyFormData = Omit<Toy, "id" | "createdAt" | "updatedAt">;

@@ -1,16 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { Doll, DollFormData } from "./types";
+import type { Toy, ToyFormData } from "./types";
 
-async function fetchToys(): Promise<Doll[]> {
+async function fetchToys(): Promise<Toy[]> {
   const res = await fetch("/api/toys");
   if (!res.ok) throw new Error("Failed to load collection");
   return res.json();
 }
 
 export function useCollection() {
-  const [toys, setToys] = useState<Doll[]>([]);
+  const [toys, setToys] = useState<Toy[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,8 +32,8 @@ export function useCollection() {
     load();
   }, [load]);
 
-  const addDoll = useCallback(
-    async (data: DollFormData, imageFile?: File | null) => {
+  const addToy = useCallback(
+    async (data: ToyFormData, imageFile?: File | null) => {
       const form = new FormData();
       form.set("name", data.name);
       if (data.line) form.set("line", data.line);
@@ -49,7 +49,7 @@ export function useCollection() {
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Failed to add doll");
+        throw new Error(err.error || "Failed to add toy");
       }
       const created = await res.json();
       setToys((prev) => [created, ...prev]);
@@ -58,10 +58,10 @@ export function useCollection() {
     []
   );
 
-  const updateDoll = useCallback(
+  const updateToy = useCallback(
     async (
       id: string,
-      data: Partial<DollFormData>,
+      data: Partial<ToyFormData>,
       imageFile?: File | null,
       removeImage?: boolean
     ) => {
@@ -81,7 +81,7 @@ export function useCollection() {
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Failed to update doll");
+        throw new Error(err.error || "Failed to update toy");
       }
       const updated = await res.json();
       setToys((prev) =>
@@ -91,13 +91,13 @@ export function useCollection() {
     []
   );
 
-  const deleteDoll = useCallback(async (id: string) => {
+  const deleteToy = useCallback(async (id: string) => {
     const res = await fetch(`/api/toys/${id}`, { method: "DELETE" });
     if (!res.ok) throw new Error("Failed to delete");
     setToys((prev) => prev.filter((d) => d.id !== id));
   }, []);
 
-  const getDoll = useCallback(
+  const getToy = useCallback(
     (id: string) => toys.find((d) => d.id === id),
     [toys]
   );
@@ -107,9 +107,9 @@ export function useCollection() {
     loading,
     error,
     reload: load,
-    addDoll,
-    updateDoll,
-    deleteDoll,
-    getDoll,
+    addToy,
+    updateToy,
+    deleteToy,
+    getToy,
   };
 }

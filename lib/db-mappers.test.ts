@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { rowToDoll } from "./db-mappers";
+import { rowToToy } from "./db-mappers";
 
-describe("rowToDoll", () => {
+describe("rowToToy", () => {
   it("maps full row to API shape with nulls as undefined", () => {
     const row = {
       id: "id-1",
@@ -16,7 +16,7 @@ describe("rowToDoll", () => {
       created_at: new Date("2024-01-01T12:00:00.000Z"),
       updated_at: new Date("2024-01-02T12:00:00.000Z"),
     };
-    const result = rowToDoll(row);
+    const result = rowToToy(row);
     expect(result).toEqual({
       id: "id-1",
       name: "Barbie",
@@ -46,7 +46,7 @@ describe("rowToDoll", () => {
       created_at: new Date("2024-02-01T00:00:00.000Z"),
       updated_at: new Date("2024-02-01T00:00:00.000Z"),
     };
-    const result = rowToDoll(row);
+    const result = rowToToy(row);
     expect(result).toEqual({
       id: "id-2",
       name: "Ken",
@@ -65,7 +65,7 @@ describe("rowToDoll", () => {
   it("uses camelCase for imageUrl, createdAt, updatedAt", () => {
     const row = {
       id: "x",
-      name: "Doll",
+      name: "Toy",
       line: null,
       year: null,
       factory: null,
@@ -76,7 +76,7 @@ describe("rowToDoll", () => {
       created_at: new Date(0),
       updated_at: new Date(1000),
     };
-    const result = rowToDoll(row);
+    const result = rowToToy(row);
     expect(result.imageUrl).toBe("url");
     expect(result.createdAt).toBe("1970-01-01T00:00:00.000Z");
     expect(result.updatedAt).toBe("1970-01-01T00:00:01.000Z");

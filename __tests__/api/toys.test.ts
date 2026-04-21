@@ -55,7 +55,7 @@ describe("GET /api/toys", () => {
     vi.mocked(query)
       .mockResolvedValueOnce([
         {
-          id: "doll-1",
+          id: "toy-1",
           name: "Barbie",
           line: "Collector",
           year: 2020,
@@ -72,7 +72,7 @@ describe("GET /api/toys", () => {
     const data = await res.json();
     expect(Array.isArray(data)).toBe(true);
     expect(data).toHaveLength(1);
-    expect(data[0].id).toBe("doll-1");
+    expect(data[0].id).toBe("toy-1");
     expect(data[0].name).toBe("Barbie");
     expect(data[0].line).toBe("Collector");
     expect(data[0].imageUrl).toBeUndefined();
@@ -89,7 +89,7 @@ describe("POST /api/toys", () => {
     const { getCurrentUserId } = await import("@/lib/session");
     vi.mocked(getCurrentUserId).mockResolvedValueOnce(null);
 
-    const res = await POST(createPostRequest({ name: "Doll" }));
+    const res = await POST(createPostRequest({ name: "Toy" }));
     expect(res.status).toBe(401);
     const data = await res.json();
     expect(data.error).toBe("Unauthorized");

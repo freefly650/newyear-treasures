@@ -9,7 +9,7 @@ interface User {
   email: string;
   name: string | null;
   createdAt: string;
-  dollCount: number;
+  toyCount: number;
 }
 
 interface RestoreResult {
@@ -312,7 +312,7 @@ export default function AdminPage() {
                           <span className="text-mauve">({u.email})</span>
                           {" – "}
                           <span className="text-mauve/90">
-                            {(u.dollCount ?? 0) === 1 ? "1 doll" : `${u.dollCount ?? 0} toys`}
+                            {(u.toyCount ?? 0) === 1 ? "1 toy" : `${u.toyCount ?? 0} toys`}
                           </span>
                         </>
                       ) : (
@@ -320,7 +320,7 @@ export default function AdminPage() {
                           <span className="text-ink">{u.email}</span>
                           {" – "}
                           <span className="text-mauve/90">
-                            {(u.dollCount ?? 0) === 1 ? "1 doll" : `${u.dollCount ?? 0} toys`}
+                            {(u.toyCount ?? 0) === 1 ? "1 toy" : `${u.toyCount ?? 0} toys`}
                           </span>
                         </>
                       )}
