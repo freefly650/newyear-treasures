@@ -19,7 +19,7 @@ interface BackupPayload {
   version: 3;
   exportedAt: string;
   userId: string;
-  dolls: ExportDoll[];
+  toys: ExportDoll[];
 }
 
 export async function GET(request: NextRequest) {
@@ -50,11 +50,11 @@ export async function GET(request: NextRequest) {
     }
 
     const rows = await query<DollRow>(
-      "SELECT id, user_id, name, line, year, condition, notes, image_url, created_at, updated_at FROM dolls WHERE user_id = $1 ORDER BY created_at DESC",
+      "SELECT id, user_id, name, line, year, condition, notes, image_url, created_at, updated_at FROM toys WHERE user_id = $1 ORDER BY created_at DESC",
       [userId]
     );
 
-    const dolls: ExportDoll[] = rows.map((row) => ({
+    const toys: ExportDoll[] = rows.map((row) => ({
       id: row.id,
       name: row.name,
       line: row.line,
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
       version: 3,
       exportedAt: new Date().toISOString(),
       userId,
-      dolls,
+      toys,
     };
 
     return NextResponse.json(payload);

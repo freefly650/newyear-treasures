@@ -3,14 +3,14 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Doll, DollFormData } from "./types";
 
-async function fetchDolls(): Promise<Doll[]> {
-  const res = await fetch("/api/dolls");
+async function fetchToys(): Promise<Doll[]> {
+  const res = await fetch("/api/toys");
   if (!res.ok) throw new Error("Failed to load collection");
   return res.json();
 }
 
 export function useCollection() {
-  const [dolls, setDolls] = useState<Doll[]>([]);
+  const [toys, setToys] = useState<Doll[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,11 +18,11 @@ export function useCollection() {
     setLoading(true);
     setError(null);
     try {
-      const list = await fetchDolls();
-      setDolls(list);
+      const list = await fetchToys();
+      setToys(list);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load");
-      setDolls([]);
+      setToys([]);
     } finally {
       setLoading(false);
     }
@@ -43,7 +43,7 @@ export function useCollection() {
       if (data.rarity) form.set("rarity", data.rarity);
       if (data.notes) form.set("notes", data.notes);
       if (imageFile && imageFile.size > 0) form.set("image", imageFile);
-      const res = await fetch("/api/dolls", {
+      const res = await fetch("/api/toys", {
         method: "POST",
         body: form,
       });
@@ -52,7 +52,7 @@ export function useCollection() {
         throw new Error(err.error || "Failed to add doll");
       }
       const created = await res.json();
-      setDolls((prev) => [created, ...prev]);
+      setToys((prev) => [created, ...prev]);
       return created.id;
     },
     []
@@ -75,7 +75,7 @@ export function useCollection() {
       form.set("notes", (data.notes ?? "") || "");
       if (removeImage) form.set("removeImage", "true");
       if (imageFile && imageFile.size > 0) form.set("image", imageFile);
-      const res = await fetch(`/api/dolls/${id}`, {
+      const res = await fetch(`/api/toys/${id}`, {
         method: "PATCH",
         body: form,
       });
@@ -84,7 +84,7 @@ export function useCollection() {
         throw new Error(err.error || "Failed to update doll");
       }
       const updated = await res.json();
-      setDolls((prev) =>
+      setToys((prev) =>
         prev.map((d) => (d.id === id ? updated : d))
       );
     },
@@ -92,18 +92,18 @@ export function useCollection() {
   );
 
   const deleteDoll = useCallback(async (id: string) => {
-    const res = await fetch(`/api/dolls/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/toys/${id}`, { method: "DELETE" });
     if (!res.ok) throw new Error("Failed to delete");
-    setDolls((prev) => prev.filter((d) => d.id !== id));
+    setToys((prev) => prev.filter((d) => d.id !== id));
   }, []);
 
   const getDoll = useCallback(
-    (id: string) => dolls.find((d) => d.id === id),
-    [dolls]
+    (id: string) => toys.find((d) => d.id === id),
+    [toys]
   );
 
   return {
-    dolls,
+    toys,
     loading,
     error,
     reload: load,

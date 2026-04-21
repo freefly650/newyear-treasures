@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       doll_count: string | number;
     }>(
       `SELECT u.id, u.email, u.name, u.created_at,
-        (SELECT COUNT(*)::int FROM dolls d WHERE d.user_id = u.id) AS doll_count
+        (SELECT COUNT(*)::int FROM toys d WHERE d.user_id = u.id) AS doll_count
        FROM users u
        ORDER BY u.created_at ASC`
     );

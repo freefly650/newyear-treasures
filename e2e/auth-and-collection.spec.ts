@@ -32,7 +32,7 @@ test.describe("Auth and collection", () => {
 
     // Page shows collection: empty state text or doll count or add button
     await expect(
-      page.getByText(/your collection|dolls in your collection|add a doll/i).first()
+      page.getByText(/your collection|toys in your collection|add a doll/i).first()
     ).toBeVisible({ timeout: 10000 });
   });
 });

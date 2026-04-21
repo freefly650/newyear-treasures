@@ -94,7 +94,7 @@ export async function ensureSchema(): Promise<void> {
   await query(`CREATE INDEX IF NOT EXISTS idx_auth_tokens_expires ON auth_tokens(expires_at)`).catch(() => {});
 
   await query(`
-    CREATE TABLE IF NOT EXISTS dolls (
+    CREATE TABLE IF NOT EXISTS toys (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       user_id UUID REFERENCES users(id) ON DELETE CASCADE,
       name TEXT NOT NULL,
@@ -109,12 +109,12 @@ export async function ensureSchema(): Promise<void> {
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
-  await query(`ALTER TABLE dolls ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES users(id) ON DELETE CASCADE`).catch(() => {});
-  await query(`ALTER TABLE dolls ADD COLUMN IF NOT EXISTS image_url TEXT`).catch(() => {});
-  await query(`ALTER TABLE dolls ADD COLUMN IF NOT EXISTS factory TEXT`).catch(() => {});
-  await query(`ALTER TABLE dolls ADD COLUMN IF NOT EXISTS paint TEXT`).catch(() => {});
-  await query(`ALTER TABLE dolls ADD COLUMN IF NOT EXISTS rarity TEXT`).catch(() => {});
-  await query(`ALTER TABLE dolls ALTER COLUMN year TYPE TEXT USING year::TEXT`).catch(() => {});
+  await query(`ALTER TABLE toys ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES users(id) ON DELETE CASCADE`).catch(() => {});
+  await query(`ALTER TABLE toys ADD COLUMN IF NOT EXISTS image_url TEXT`).catch(() => {});
+  await query(`ALTER TABLE toys ADD COLUMN IF NOT EXISTS factory TEXT`).catch(() => {});
+  await query(`ALTER TABLE toys ADD COLUMN IF NOT EXISTS paint TEXT`).catch(() => {});
+  await query(`ALTER TABLE toys ADD COLUMN IF NOT EXISTS rarity TEXT`).catch(() => {});
+  await query(`ALTER TABLE toys ALTER COLUMN year TYPE TEXT USING year::TEXT`).catch(() => {});
 
   const users = await query<{ id: string }>("SELECT id FROM users LIMIT 1");
   if (users.length === 0) {
@@ -125,18 +125,18 @@ export async function ensureSchema(): Promise<void> {
     );
     const legacyId = inserted[0]?.id;
     if (legacyId) {
-      await query("UPDATE dolls SET user_id = $1 WHERE user_id IS NULL", [legacyId]);
+      await query("UPDATE toys SET user_id = $1 WHERE user_id IS NULL", [legacyId]);
     }
   } else {
     const legacyId = users[0].id;
-    await query("UPDATE dolls SET user_id = $1 WHERE user_id IS NULL", [legacyId]).catch(() => {});
+    await query("UPDATE toys SET user_id = $1 WHERE user_id IS NULL", [legacyId]).catch(() => {});
   }
-  await query(`ALTER TABLE dolls ALTER COLUMN user_id SET NOT NULL`).catch(() => {});
+  await query(`ALTER TABLE toys ALTER COLUMN user_id SET NOT NULL`).catch(() => {});
 
-  await query(`CREATE INDEX IF NOT EXISTS idx_dolls_user_id ON dolls(user_id)`).catch(() => {});
-  await query(`CREATE INDEX IF NOT EXISTS idx_dolls_user_created ON dolls(user_id, created_at DESC)`).catch(() => {});
-  await query(`CREATE INDEX IF NOT EXISTS idx_dolls_line ON dolls(line)`).catch(() => {});
-  await query(`CREATE INDEX IF NOT EXISTS idx_dolls_created_at ON dolls(created_at DESC)`).catch(() => {});
+  await query(`CREATE INDEX IF NOT EXISTS idx_toys_user_id ON toys(user_id)`).catch(() => {});
+  await query(`CREATE INDEX IF NOT EXISTS idx_toys_user_created ON toys(user_id, created_at DESC)`).catch(() => {});
+  await query(`CREATE INDEX IF NOT EXISTS idx_toys_line ON toys(line)`).catch(() => {});
+  await query(`CREATE INDEX IF NOT EXISTS idx_toys_created_at ON toys(created_at DESC)`).catch(() => {});
 }
 
 export { getPool };

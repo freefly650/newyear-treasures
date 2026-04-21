@@ -3,14 +3,14 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCollection } from "@/lib/collection-store";
-import { sortDolls, type DollSortKey } from "@/lib/doll-sorting";
+import { sortToys, type DollSortKey } from "@/lib/doll-sorting";
 import { DollCard } from "@/components/DollCard";
 import { DollForm, type DollFormSavePayload } from "@/components/DollForm";
 import { ImageModal } from "@/components/ImageModal";
 
 export default function Home() {
   const {
-    dolls,
+    toys,
     loading,
     error,
     reload,
@@ -52,12 +52,12 @@ export default function Home() {
 
   const lines = useMemo(() => {
     const set = new Set<string>();
-    dolls.forEach((d) => d.line && set.add(d.line));
+    toys.forEach((d) => d.line && set.add(d.line));
     return Array.from(set).sort();
-  }, [dolls]);
+  }, [toys]);
 
   const filtered = useMemo(() => {
-    let list = dolls;
+    let list = toys;
     if (search.trim()) {
       const q = search.trim().toLowerCase();
       list = list.filter(
@@ -71,9 +71,9 @@ export default function Home() {
       list = list.filter((d) => d.line === filterLine);
     }
     return list;
-  }, [dolls, search, filterLine]);
+  }, [toys, search, filterLine]);
 
-  const sorted = useMemo(() => sortDolls(filtered, sortKey), [filtered, sortKey]);
+  const sorted = useMemo(() => sortToys(filtered, sortKey), [filtered, sortKey]);
 
   const editingDoll = editingId ? getDoll(editingId) : null;
 
@@ -109,7 +109,7 @@ export default function Home() {
     }
   };
 
-  if (loading && dolls.length === 0) {
+  if (loading && toys.length === 0) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <p className="text-mauve">Завантаження колекції...</p>
@@ -157,9 +157,9 @@ export default function Home() {
         </div>
       )}
 
-      {dolls.length > 0 && (
+      {toys.length > 0 && (
         <p className="mb-4 text-sm text-mauve">
-          У колекції: {dolls.length}
+          У колекції: {toys.length}
         </p>
       )}
 
@@ -232,7 +232,7 @@ export default function Home() {
 
       {filtered.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-blush/60 bg-white/50 py-12 text-center">
-          {dolls.length === 0 ? (
+          {toys.length === 0 ? (
             <>
               <p className="font-display text-lg text-ink">
                 Колекція порожня

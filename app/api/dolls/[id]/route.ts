@@ -30,7 +30,7 @@ export async function GET(
       created_at: Date;
       updated_at: Date;
     }>(
-      "SELECT id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at FROM dolls WHERE id = $1 AND user_id = $2",
+      "SELECT id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at FROM toys WHERE id = $1 AND user_id = $2",
       [id, userId]
     );
     if (rows.length === 0) {
@@ -38,7 +38,7 @@ export async function GET(
     }
     return NextResponse.json(rowToDoll(rows[0]));
   } catch (err) {
-    console.error("GET /api/dolls/[id]", err);
+    console.error("GET /api/toys/[id]", err);
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Database error" },
       { status: 500 }
@@ -79,7 +79,7 @@ export async function PATCH(
 
     if (removeImage) {
       const current = await query<{ image_url: string | null }>(
-        "SELECT image_url FROM dolls WHERE id = $1 AND user_id = $2",
+        "SELECT image_url FROM toys WHERE id = $1 AND user_id = $2",
         [id, userId]
       );
       if (current.length > 0 && current[0].image_url) {
@@ -98,7 +98,7 @@ export async function PATCH(
         );
       }
       const current = await query<{ image_url: string | null }>(
-        "SELECT image_url FROM dolls WHERE id = $1 AND user_id = $2",
+        "SELECT image_url FROM toys WHERE id = $1 AND user_id = $2",
         [id, userId]
       );
       const buf = Buffer.from(await file.arrayBuffer());
@@ -111,12 +111,12 @@ export async function PATCH(
 
     if (image_url !== undefined) {
       await query(
-        "UPDATE dolls SET name = $1, line = $2, factory = $3, year = $4, paint = $5, rarity = $6, notes = $7, image_url = $8, updated_at = NOW() WHERE id = $9 AND user_id = $10",
+        "UPDATE toys SET name = $1, line = $2, factory = $3, year = $4, paint = $5, rarity = $6, notes = $7, image_url = $8, updated_at = NOW() WHERE id = $9 AND user_id = $10",
         [name, line, factory, year, paint, rarity, notes, image_url, id, userId]
       );
     } else {
       await query(
-        "UPDATE dolls SET name = $1, line = $2, factory = $3, year = $4, paint = $5, rarity = $6, notes = $7, updated_at = NOW() WHERE id = $8 AND user_id = $9",
+        "UPDATE toys SET name = $1, line = $2, factory = $3, year = $4, paint = $5, rarity = $6, notes = $7, updated_at = NOW() WHERE id = $8 AND user_id = $9",
         [name, line, factory, year, paint, rarity, notes, id, userId]
       );
     }
@@ -134,7 +134,7 @@ export async function PATCH(
       created_at: Date;
       updated_at: Date;
     }>(
-      "SELECT id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at FROM dolls WHERE id = $1 AND user_id = $2",
+      "SELECT id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at FROM toys WHERE id = $1 AND user_id = $2",
       [id, userId]
     );
     if (rows.length === 0) {
@@ -142,7 +142,7 @@ export async function PATCH(
     }
     return NextResponse.json(rowToDoll(rows[0]));
   } catch (err) {
-    console.error("PATCH /api/dolls/[id]", err);
+    console.error("PATCH /api/toys/[id]", err);
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Database error" },
       { status: 500 }
@@ -162,14 +162,14 @@ export async function DELETE(
   try {
     await ensureSchema();
     const existing = await query<{ image_url: string | null }>(
-      "SELECT image_url FROM dolls WHERE id = $1 AND user_id = $2",
+      "SELECT image_url FROM toys WHERE id = $1 AND user_id = $2",
       [id, userId]
     );
     if (existing.length > 0 && existing[0].image_url) {
       await deleteImage(existing[0].image_url);
     }
     const result = await query(
-      "DELETE FROM dolls WHERE id = $1 AND user_id = $2 RETURNING id",
+      "DELETE FROM toys WHERE id = $1 AND user_id = $2 RETURNING id",
       [id, userId]
     );
     if (result.length === 0) {
@@ -177,7 +177,7 @@ export async function DELETE(
     }
     return new NextResponse(null, { status: 204 });
   } catch (err) {
-    console.error("DELETE /api/dolls/[id]", err);
+    console.error("DELETE /api/toys/[id]", err);
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Database error" },
       { status: 500 }

@@ -17,11 +17,11 @@ function compareStringsAsc(a: string, b: string) {
   return a.localeCompare(b, "uk", { sensitivity: "base" });
 }
 
-export function sortDolls(dolls: Doll[], sortKey: DollSortKey): Doll[] {
-  return [...dolls].sort((a, b) => compareDolls(a, b, sortKey));
+export function sortToys(toys: Doll[], sortKey: DollSortKey): Doll[] {
+  return [...toys].sort((a, b) => compareToys(a, b, sortKey));
 }
 
-export function compareDolls(a: Doll, b: Doll, sortKey: DollSortKey): number {
+export function compareToys(a: Doll, b: Doll, sortKey: DollSortKey): number {
   const createdAtCmpDesc = () => {
     const ta = parseTime(a);
     const tb = parseTime(b);

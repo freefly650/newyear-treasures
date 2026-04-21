@@ -26,13 +26,13 @@ export async function GET(request: NextRequest) {
       created_at: Date;
       updated_at: Date;
     }>(
-      "SELECT id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at FROM dolls WHERE user_id = $1 ORDER BY created_at DESC",
+      "SELECT id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at FROM toys WHERE user_id = $1 ORDER BY created_at DESC",
       [userId]
     );
-    const dolls = rows.map((r) => rowToDoll(r));
-    return NextResponse.json(dolls);
+    const toys = rows.map((r) => rowToDoll(r));
+    return NextResponse.json(toys);
   } catch (err) {
-    console.error("GET /api/dolls", err);
+    console.error("GET /api/toys", err);
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Database error" },
       { status: 500 }
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
       image_url = await uploadImage(buf, mime, userId);
     }
     const rows = await query<{ id: string; created_at: Date; updated_at: Date }>(
-      `INSERT INTO dolls (user_id, name, line, factory, year, paint, rarity, notes, image_url)
+      `INSERT INTO toys (user_id, name, line, factory, year, paint, rarity, notes, image_url)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        RETURNING id, created_at, updated_at`,
       [userId, name, line, factory, year, paint, rarity, notes, image_url]
@@ -98,12 +98,12 @@ export async function POST(request: NextRequest) {
       created_at: Date;
       updated_at: Date;
     }>(
-      "SELECT id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at FROM dolls WHERE id = $1 AND user_id = $2",
+      "SELECT id, name, line, factory, year, paint, rarity, notes, image_url, created_at, updated_at FROM toys WHERE id = $1 AND user_id = $2",
       [row.id, userId]
     );
     return NextResponse.json(rowToDoll(full[0]));
   } catch (err) {
-    console.error("POST /api/dolls", err);
+    console.error("POST /api/toys", err);
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Database error" },
       { status: 500 }

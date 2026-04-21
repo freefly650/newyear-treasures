@@ -66,7 +66,7 @@ export async function PATCH(
 
 /**
  * DELETE /api/admin/users/[id]
- * Admin only. Deletes the user, their dolls, and their Cloudinary folder (all images).
+ * Admin only. Deletes the user, their toys, and their Cloudinary folder (all images).
  */
 export async function DELETE(
   request: NextRequest,

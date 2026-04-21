@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 
-CREATE TABLE IF NOT EXISTS dolls (
+CREATE TABLE IF NOT EXISTS toys (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS dolls (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX IF NOT EXISTS idx_dolls_user_id ON dolls(user_id);
-CREATE INDEX IF NOT EXISTS idx_dolls_user_created ON dolls(user_id, created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_dolls_line ON dolls(line);
-CREATE INDEX IF NOT EXISTS idx_dolls_created_at ON dolls(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_toys_user_id ON toys(user_id);
+CREATE INDEX IF NOT EXISTS idx_toys_user_created ON toys(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_toys_line ON toys(line);
+CREATE INDEX IF NOT EXISTS idx_toys_created_at ON toys(created_at DESC);

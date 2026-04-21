@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
-import { GET, POST } from "@/app/api/dolls/route";
+import { GET, POST } from "@/app/api/toys/route";
 
 vi.mock("@/lib/session", () => ({
   getCurrentUserId: vi.fn(),
@@ -17,7 +17,7 @@ vi.mock("@/lib/cloudinary", () => ({
 }));
 
 function createGetRequest() {
-  return new NextRequest("http://localhost/api/dolls");
+  return new NextRequest("http://localhost/api/toys");
 }
 
 function createPostRequest(formData: Record<string, string>) {
@@ -25,13 +25,13 @@ function createPostRequest(formData: Record<string, string>) {
   for (const [k, v] of Object.entries(formData)) {
     fd.set(k, v);
   }
-  return new NextRequest("http://localhost/api/dolls", {
+  return new NextRequest("http://localhost/api/toys", {
     method: "POST",
     body: fd,
   });
 }
 
-describe("GET /api/dolls", () => {
+describe("GET /api/toys", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -46,7 +46,7 @@ describe("GET /api/dolls", () => {
     expect(data.error).toBe("Unauthorized");
   });
 
-  it("returns 200 and dolls array when authenticated", async () => {
+  it("returns 200 and toys array when authenticated", async () => {
     const { getCurrentUserId } = await import("@/lib/session");
     const { query } = await import("@/lib/db");
     const userId = "user-uuid-1";
@@ -80,7 +80,7 @@ describe("GET /api/dolls", () => {
   });
 });
 
-describe("POST /api/dolls", () => {
+describe("POST /api/toys", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });

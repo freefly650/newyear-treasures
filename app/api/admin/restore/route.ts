@@ -26,7 +26,7 @@ interface ImportPayload {
   userId: string;
   replaceAll?: boolean;
   copyImages?: boolean;
-  dolls?: ImportDoll[];
+  toys?: ImportDoll[];
 }
 
 export async function POST(request: NextRequest) {
@@ -43,16 +43,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!Array.isArray(body.dolls)) {
+    if (!Array.isArray(body.toys)) {
       return NextResponse.json(
-        { error: "Invalid backup file: dolls array missing" },
+        { error: "Invalid backup file: toys array missing" },
         { status: 400 }
       );
     }
 
     const replaceAll = body.replaceAll !== false;
     const copyImages = body.copyImages !== false;
-    const hasBase64 = body.dolls.some(
+    const hasBase64 = body.toys.some(
       (d) => d.imageBase64 && d.imageBase64.length > 0
     );
     if (hasBase64 && !isCloudinaryConfigured()) {
@@ -79,12 +79,12 @@ export async function POST(request: NextRequest) {
     }
 
     if (replaceAll) {
-      await query("DELETE FROM dolls WHERE user_id = $1", [userId]);
+      await query("DELETE FROM toys WHERE user_id = $1", [userId]);
     }
 
     let imported = 0;
 
-    for (const d of body.dolls) {
+    for (const d of body.toys) {
       if (!d || !d.name) continue;
 
       let image_url: string | null = null;
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
 
       const dollId = crypto.randomUUID();
       await query(
-        `INSERT INTO dolls
+        `INSERT INTO toys
           (user_id, id, name, line, year, condition, notes, image_url, created_at, updated_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
         [

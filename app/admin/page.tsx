@@ -231,7 +231,7 @@ export default function AdminPage() {
     try {
       const text = await file.text();
       const parsed = JSON.parse(text);
-      const body = { userId: restoreUserId, replaceAll, copyImages, dolls: parsed.dolls ?? [] };
+      const body = { userId: restoreUserId, replaceAll, copyImages, toys: parsed.toys ?? [] };
       const res = await fetch("/api/admin/restore", {
         method: "POST",
         headers: { "Content-Type": "application/json", ...headers() },
@@ -312,7 +312,7 @@ export default function AdminPage() {
                           <span className="text-mauve">({u.email})</span>
                           {" – "}
                           <span className="text-mauve/90">
-                            {(u.dollCount ?? 0) === 1 ? "1 doll" : `${u.dollCount ?? 0} dolls`}
+                            {(u.dollCount ?? 0) === 1 ? "1 doll" : `${u.dollCount ?? 0} toys`}
                           </span>
                         </>
                       ) : (
@@ -320,7 +320,7 @@ export default function AdminPage() {
                           <span className="text-ink">{u.email}</span>
                           {" – "}
                           <span className="text-mauve/90">
-                            {(u.dollCount ?? 0) === 1 ? "1 doll" : `${u.dollCount ?? 0} dolls`}
+                            {(u.dollCount ?? 0) === 1 ? "1 doll" : `${u.dollCount ?? 0} toys`}
                           </span>
                         </>
                       )}
@@ -435,7 +435,7 @@ export default function AdminPage() {
                   Are you sure you want to delete this user?
                 </p>
                 <p className="mt-1 text-sm text-mauve">
-                  This will remove their account, all their dolls, and all their images from Cloudinary. This cannot be undone.
+                  This will remove their account, all their toys, and all their images from Cloudinary. This cannot be undone.
                 </p>
                 <div className="mt-4 flex gap-3">
                   <button
@@ -504,7 +504,7 @@ export default function AdminPage() {
           <section className="mb-8 rounded-2xl border border-blush/40 bg-white/90 p-5 shadow-sm sm:p-6">
             <h2 className="font-display text-lg text-ink sm:text-xl">Download backup</h2>
             <p className="mt-1 text-sm text-mauve">
-              Export one user’s dolls (and image URLs) to a JSON file.
+              Export one user’s toys (and image URLs) to a JSON file.
             </p>
             <div className="mt-4 flex flex-wrap items-center gap-3">
               <select
@@ -534,7 +534,7 @@ export default function AdminPage() {
           <section className="rounded-2xl border border-blush/40 bg-white/90 p-5 shadow-sm sm:p-6">
             <h2 className="font-display text-lg text-ink sm:text-xl">Restore from file</h2>
             <p className="mt-1 text-sm text-mauve">
-              Restore a backup into a selected user. Existing dolls for that user can be replaced or appended.
+              Restore a backup into a selected user. Existing toys for that user can be replaced or appended.
             </p>
             <form onSubmit={handleUpload} className="mt-4 space-y-4">
               <div>
@@ -571,7 +571,7 @@ export default function AdminPage() {
                   onChange={(e) => setReplaceAll(e.target.checked)}
                   className="h-4 w-4 rounded border-mauve/50 text-rose focus:ring-rose"
                 />
-                Replace all existing dolls for this user (recommended for full refresh)
+                Replace all existing toys for this user (recommended for full refresh)
               </label>
               <div>
                 <span className="block text-sm text-mauve mb-1">Copy images</span>
@@ -601,7 +601,7 @@ export default function AdminPage() {
               {uploadError && <p className="text-sm text-rose">{uploadError}</p>}
               {uploadResult && (
                 <p className="text-sm text-mauve">
-                  Imported {uploadResult.imported} dolls into user.{" "}
+                  Imported {uploadResult.imported} toys into user.{" "}
                   {uploadResult.replaceAll ? "Existing data was cleared first." : ""}
                 </p>
               )}
